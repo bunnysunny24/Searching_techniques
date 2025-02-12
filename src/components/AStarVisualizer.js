@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
 const ROWS = 20;
-const COLS = 20;
+const COLS = 40;
 
 const heuristic = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
