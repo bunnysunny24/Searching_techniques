@@ -90,9 +90,18 @@ const AStarVisualizer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 bg-gray-900 min-h-screen text-white">
-      <h1 className="text-3xl font-bold mb-6">A* Pathfinding Visualizer</h1>
-      <div style={{ display: "grid", gridTemplateColumns: `repeat(${COLS}, 1fr)` }} className="gap-1 p-3 bg-gray-800 rounded-lg shadow-lg">
+    <div className="flex flex-col items-center justify-center p-4 bg-gray-900 min-h-screen text-white">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center">A* Pathfinding Visualizer</h1>
+
+      {/* Responsive Grid */}
+      <div
+        className="overflow-auto p-2 bg-gray-800 rounded-lg shadow-lg border border-gray-600"
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${COLS}, minmax(10px, 1fr))`,
+          maxWidth: "90vw",
+        }}
+      >
         {grid.flat().map((cell) => {
           let bgColor = "bg-gray-700";
           if (cell.x === start.x && cell.y === start.y) bgColor = "bg-blue-500";
@@ -103,23 +112,27 @@ const AStarVisualizer = () => {
           return (
             <motion.div
               key={`${cell.x}-${cell.y}`}
-              className={`w-6 h-6 ${bgColor} border border-gray-600 rounded-md shadow-sm cursor-pointer`}
+              className={`border border-gray-600 rounded-md shadow-sm cursor-pointer 
+                sm:w-6 sm:h-6 w-4 h-4 ${bgColor}`}
               whileHover={{ scale: 1.2 }}
               onClick={() => setEnd({ x: cell.x, y: cell.y })}
+              onTouchStart={() => setEnd({ x: cell.x, y: cell.y })} // Touch support for mobile
             />
           );
         })}
       </div>
-      <div className="mt-6 flex space-x-4">
+
+      {/* Buttons */}
+      <div className="mt-4 flex flex-wrap justify-center space-x-2">
         <button
           onClick={handleFindPath}
-          className="px-5 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition text-sm sm:text-base"
         >
           Find Path
         </button>
         <button
           onClick={resetGrid}
-          className="px-5 py-2 bg-red-600 text-white rounded-lg shadow-lg hover:bg-red-700 transition"
+          className="px-4 py-2 bg-red-600 text-white rounded-lg shadow-lg hover:bg-red-700 transition text-sm sm:text-base"
         >
           Reset
         </button>
