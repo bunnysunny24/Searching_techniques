@@ -1,5 +1,5 @@
 import './App.css';
-import Algo from './components/algo'; // Import the Algo component
+import Algo from './components/AStarVisualizer'; // Import the Algo component
 
 function App() {
   return (
