@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const ROWS = 10;
-const COLS = 10;
+const ROWS = 20;
+const COLS = 20;
 
-const heuristic = (a, b) => {
-  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-};
+const heuristic = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
-const aStar = (grid, start, end) => {
+const aStar = (grid, start, end, setPath) => {
   const openSet = [start];
   const closedSet = new Set();
   const cameFrom = new Map();
@@ -30,35 +28,30 @@ const aStar = (grid, start, end) => {
         path.push(temp);
         temp = cameFrom.get(`${temp.x}-${temp.y}`);
       }
-      return path.reverse();
+      setPath(path.reverse());
+      return;
     }
 
     const directions = [
-      { x: 0, y: -1 },
-      { x: 0, y: 1 },
-      { x: -1, y: 0 },
-      { x: 1, y: 0 },
+      { x: 0, y: -1 }, { x: 0, y: 1 }, { x: -1, y: 0 }, { x: 1, y: 0 },
+      { x: -1, y: -1 }, { x: 1, y: 1 }, { x: -1, y: 1 }, { x: 1, y: -1 },
     ];
 
     for (const dir of directions) {
       const neighbor = { x: current.x + dir.x, y: current.y + dir.y };
       const key = `${neighbor.x}-${neighbor.y}`;
-
+      
       if (
-        neighbor.x >= 0 &&
-        neighbor.x < COLS &&
-        neighbor.y >= 0 &&
-        neighbor.y < ROWS &&
+        neighbor.x >= 0 && neighbor.x < COLS &&
+        neighbor.y >= 0 && neighbor.y < ROWS &&
         !grid[neighbor.y][neighbor.x].isObstacle &&
         !closedSet.has(key)
       ) {
         const tentativeG = (gScore.get(`${current.x}-${current.y}`) || Infinity) + 1;
-
         if (!gScore.has(key) || tentativeG < gScore.get(key)) {
           cameFrom.set(key, current);
           gScore.set(key, tentativeG);
           fScore.set(key, tentativeG + heuristic(neighbor, end));
-
           if (!openSet.some((node) => node.x === neighbor.x && node.y === neighbor.y)) {
             openSet.push(neighbor);
           }
@@ -66,13 +59,13 @@ const aStar = (grid, start, end) => {
       }
     }
   }
-  return [];
+  setPath([]); 
 };
 
 const AStarVisualizer = () => {
   const [grid, setGrid] = useState([]);
   const [start, setStart] = useState({ x: 0, y: 0 });
-  const [end, setEnd] = useState({ x: 9, y: 9 });
+  const [end, setEnd] = useState({ x: 19, y: 19 });
   const [path, setPath] = useState([]);
 
   useEffect(() => {
@@ -84,7 +77,7 @@ const AStarVisualizer = () => {
       Array.from({ length: COLS }, (_, x) => ({
         x,
         y,
-        isObstacle: Math.random() < 0.2,
+        isObstacle: Math.random() < 0.3,
       }))
     );
     setGrid(newGrid);
@@ -92,13 +85,14 @@ const AStarVisualizer = () => {
   };
 
   const handleFindPath = () => {
-    setPath(aStar(grid, start, end));
+    setPath([]);
+    aStar(grid, start, end, setPath);
   };
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-900 min-h-screen text-white">
       <h1 className="text-3xl font-bold mb-6">A* Pathfinding Visualizer</h1>
-      <div className="grid grid-cols-10 gap-1 p-3 bg-gray-800 rounded-lg shadow-lg">
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${COLS}, 1fr)` }} className="gap-1 p-3 bg-gray-800 rounded-lg shadow-lg">
         {grid.flat().map((cell) => {
           let bgColor = "bg-gray-700";
           if (cell.x === start.x && cell.y === start.y) bgColor = "bg-blue-500";
@@ -109,7 +103,7 @@ const AStarVisualizer = () => {
           return (
             <motion.div
               key={`${cell.x}-${cell.y}`}
-              className={`w-8 h-8 ${bgColor} border border-gray-600 rounded-md shadow-sm cursor-pointer`}
+              className={`w-6 h-6 ${bgColor} border border-gray-600 rounded-md shadow-sm cursor-pointer`}
               whileHover={{ scale: 1.2 }}
               onClick={() => setEnd({ x: cell.x, y: cell.y })}
             />

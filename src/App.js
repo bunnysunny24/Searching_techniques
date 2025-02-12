@@ -1,10 +1,10 @@
 import './App.css';
-import Algo from './components/AStarVisualizer'; // Import the Algo component
+import Algo from './components/AStarVisualizer'; 
 
 function App() {
   return (
-    <div className="App">
-      <Algo /> {/* Render the Algo component */}
+    <div>
+      <Algo /> 
     </div>
   );
 }
