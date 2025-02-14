@@ -100,6 +100,16 @@ const AStarVisualizer = () => {
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-gray-900 min-h-screen text-white">
       <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center">A* Pathfinding Visualizer</h1>
+      
+      <div className="mb-4 p-4 bg-gray-800 rounded-lg shadow-lg border border-gray-600 text-sm max-w-2xl">
+        <p className="mb-2">This visualizer demonstrates how the A* algorithm finds the shortest path between a start and end point while avoiding obstacles.</p>
+        <ul className="list-disc list-inside">
+          <li><span className="text-blue-400">Blue:</span> Start point</li>
+          <li><span className="text-green-400">Green:</span> End point</li>
+          <li><span className="text-red-400">Red:</span> Obstacles</li>
+          <li><span className="text-yellow-400">Yellow:</span> The computed shortest path</li>
+        </ul>
+      </div>
 
       <div
         className="overflow-auto p-2 bg-gray-800 rounded-lg shadow-lg border border-gray-600"

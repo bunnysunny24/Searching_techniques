@@ -5,6 +5,7 @@ const BOARD_WIDTH = 20;
 const BOARD_HEIGHT = 12;
 const GHOST_SPEED = 300;
 const GHOST_COUNT = 2;
+const PELLET_COUNT = 5;
 
 const moves = [
   { x: 0, y: 1 },
@@ -13,6 +14,7 @@ const moves = [
   { x: -1, y: 0 },
 ];
 
+// BFS Algorithm for finding the shortest path
 const bfsFindPath = (start, target) => {
   const queue = [{ ...start, path: [] }];
   const visited = new Set();
@@ -20,6 +22,7 @@ const bfsFindPath = (start, target) => {
 
   while (queue.length > 0) {
     const { x, y, path } = queue.shift();
+    
     if (x === target.x && y === target.y) return path;
 
     for (const move of moves) {
@@ -28,14 +31,16 @@ const bfsFindPath = (start, target) => {
       const key = `${newX}-${newY}`;
 
       if (
-        newX >= 0 &&
-        newX < BOARD_WIDTH &&
-        newY >= 0 &&
-        newY < BOARD_HEIGHT &&
+        newX >= 0 && newX < BOARD_WIDTH &&
+        newY >= 0 && newY < BOARD_HEIGHT &&
         !visited.has(key)
       ) {
         visited.add(key);
-        queue.push({ x: newX, y: newY, path: [...path, { x: newX, y: newY }] });
+        queue.push({
+          x: newX,
+          y: newY,
+          path: [...path, { x: newX, y: newY }],
+        });
       }
     }
   }
@@ -51,13 +56,31 @@ const PacManGame = () => {
     }))
   );
   const [pellets, setPellets] = useState(
-    Array.from({ length: 5 }, () => ({
+    Array.from({ length: PELLET_COUNT }, () => ({
       x: Math.floor(Math.random() * BOARD_WIDTH),
       y: Math.floor(Math.random() * BOARD_HEIGHT),
     }))
   );
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+
+  const resetGame = () => {
+    setPacman({ x: 0, y: 0 });
+    setGhosts(
+      Array.from({ length: GHOST_COUNT }, () => ({
+        x: Math.floor(Math.random() * BOARD_WIDTH),
+        y: Math.floor(Math.random() * BOARD_HEIGHT),
+      }))
+    );
+    setPellets(
+      Array.from({ length: PELLET_COUNT }, () => ({
+        x: Math.floor(Math.random() * BOARD_WIDTH),
+        y: Math.floor(Math.random() * BOARD_HEIGHT),
+      }))
+    );
+    setScore(0);
+    setGameOver(false);
+  };
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -111,32 +134,30 @@ const PacManGame = () => {
     <div className="flex flex-col items-center justify-center p-4 bg-gray-900 min-h-screen text-white">
       <h1 className="text-2xl font-bold mb-4 text-center">Pac-Man BFS AI</h1>
       {gameOver ? <h2 className="text-red-500 text-xl">Game Over!</h2> : <p>Score: {score}</p>}
+      <button onClick={resetGame} className="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Reset</button>
       <div
-        className="grid gap-1 bg-gray-800 p-2 rounded-lg"
+        className="grid gap-1 bg-gray-800 p-2 rounded-lg mt-4"
         style={{ gridTemplateColumns: `repeat(${BOARD_WIDTH}, minmax(40px, 1fr))` }}
       >
         {Array.from({ length: BOARD_WIDTH * BOARD_HEIGHT }, (_, i) => {
           const x = i % BOARD_WIDTH;
           const y = Math.floor(i / BOARD_WIDTH);
-          let content = null;
+          let bgColor = "bg-gray-700";
 
-          if (pacman.x === x && pacman.y === y) {
-            content = <div className="w-full h-full flex items-center justify-center text-yellow-400">😃</div>;
-          } else if (ghosts.some((g) => g.x === x && g.y === y)) {
-            content = <div className="w-full h-full flex items-center justify-center text-red-500">👻</div>;
-          } else if (pellets.some((p) => p.x === x && p.y === y)) {
-            content = <div className="w-2 h-2 bg-green-500 rounded-full mx-auto my-auto"></div>;
-          }
+          if (pacman.x === x && pacman.y === y) bgColor = "bg-yellow-400";
+          else if (ghosts.some((g) => g.x === x && g.y === y)) bgColor = "bg-red-500";
+          else if (pellets.some((p) => p.x === x && p.y === y)) bgColor = "bg-green-500";
 
-          return (
-            <motion.div
-              key={`${x}-${y}`}
-              className="w-10 h-10 border border-gray-600 rounded-md bg-gray-700 flex items-center justify-center"
-            >
-              {content}
-            </motion.div>
-          );
+          return <motion.div key={`${x}-${y}`} className={`w-10 h-10 border border-gray-600 rounded-md ${bgColor}`} />;
         })}
+      </div>
+      <div className="mt-6 text-center max-w-lg">
+        <h2 className="text-lg font-bold">How BFS Works in This Game</h2>
+        <p>
+          The ghosts use a Breadth-First Search (BFS) algorithm to chase Pac-Man.
+          BFS explores all possible moves level by level and guarantees the shortest path.
+          It does not use heuristics like A* but still efficiently finds Pac-Man.
+        </p>
       </div>
     </div>
   );
