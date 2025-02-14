@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+# Pac-Man BFS AI & A* Pathfinding Visualizer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Pac-Man BFS AI
 
-## Available Scripts
+### Description
+Pac-Man BFS AI is a grid-based game where the player controls Pac-Man, avoiding ghosts while collecting pellets. The ghosts use a Breadth-First Search (BFS) algorithm to find the shortest path to Pac-Man.
 
-In the project directory, you can run:
+### Features
+- **Grid-Based Movement**: Pac-Man moves using arrow keys within a 20x12 grid.
+- **BFS AI for Ghosts**: Ghosts dynamically find the shortest path to Pac-Man using the BFS algorithm.
+- **Scoring System**: Players gain points by collecting pellets placed randomly on the grid.
+- **Game Over Mechanic**: The game ends if a ghost reaches Pac-Man.
+- **Reset Functionality**: Players can reset the game anytime to start fresh.
 
-### `npm start`
+### Controls
+- **Arrow Keys**: Move Pac-Man up, down, left, or right.
+- **Reset Button**: Restart the game.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Technologies Used
+- **React.js**: UI framework
+- **Framer Motion**: Animations
+- **JavaScript**: Game logic and state management
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### How BFS Works in the Game
+- BFS explores all possible moves level by level.
+- Guarantees the shortest path from the ghost to Pac-Man.
+- Ghosts update their position every 300ms based on the BFS pathfinding.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## A* Pathfinding Visualizer
 
-### `npm run build`
+### Description
+A grid-based visualizer demonstrating the A* pathfinding algorithm. Users can set a start and end point, and the algorithm finds the shortest path while avoiding obstacles.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Features
+- **Dynamic Grid**: A 25x60 grid where users can define obstacles.
+- **A* Algorithm Implementation**: Uses heuristics (Manhattan Distance) for optimal pathfinding.
+- **Step-by-Step Visualization**: Animates the pathfinding process in real-time.
+- **Diagonal Movement Support**: Allows both cardinal and diagonal movements.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### How A* Algorithm Works
+- Calculates `g(n)` (distance from start node) and `h(n)` (estimated distance to target).
+- Uses `f(n) = g(n) + h(n)` to determine the best path.
+- Explores nodes in order of lowest `f(n)` value, ensuring optimal path selection.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Technologies Used
+- **React.js**: UI framework
+- **Framer Motion**: Smooth animations
+- **JavaScript**: Algorithm implementation and state handling
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Installation & Usage
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/bunnysunny24/Searching_techniques.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd your-project-folder
+   ```
+3. Install dependencies:
+   ```sh
+   npm install
+   ```
+4. Run the application:
+   ```sh
+   npm start
+   ```
+5. Open `http://localhost:3000/` in your browser.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Future Enhancements
+- **Improved AI for Ghosts**: Implement A* for more dynamic ghost movement.
+- **Customizable Grid Size**: Allow users to modify the grid dimensions.
+- **Obstacle Placement in Pac-Man**: Add walls for more complex paths.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+## License
+This project is open-source and available under the MIT License.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
