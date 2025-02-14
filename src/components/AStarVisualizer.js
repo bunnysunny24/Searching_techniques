@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const ROWS = 20;
-const COLS = 40;
+const ROWS = 25;
+const COLS = 60;
+const DELAY = 50; // Delay in ms per step
 
 const heuristic = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 
@@ -12,7 +13,6 @@ const aStar = (grid, start, end, setPath) => {
   const cameFrom = new Map();
   const gScore = new Map();
   const fScore = new Map();
-
   gScore.set(`${start.x}-${start.y}`, 0);
   fScore.set(`${start.x}-${start.y}`, heuristic(start, end));
 
@@ -28,7 +28,7 @@ const aStar = (grid, start, end, setPath) => {
         path.push(temp);
         temp = cameFrom.get(`${temp.x}-${temp.y}`);
       }
-      setPath(path.reverse());
+      animatePath(path.reverse(), setPath);
       return;
     }
 
@@ -40,7 +40,7 @@ const aStar = (grid, start, end, setPath) => {
     for (const dir of directions) {
       const neighbor = { x: current.x + dir.x, y: current.y + dir.y };
       const key = `${neighbor.x}-${neighbor.y}`;
-      
+
       if (
         neighbor.x >= 0 && neighbor.x < COLS &&
         neighbor.y >= 0 && neighbor.y < ROWS &&
@@ -59,7 +59,15 @@ const aStar = (grid, start, end, setPath) => {
       }
     }
   }
-  setPath([]); 
+  setPath([]);
+};
+
+const animatePath = (path, setPath) => {
+  path.forEach((cell, index) => {
+    setTimeout(() => {
+      setPath((prev) => [...prev, cell]);
+    }, index * DELAY);
+  });
 };
 
 const AStarVisualizer = () => {
@@ -93,7 +101,6 @@ const AStarVisualizer = () => {
     <div className="flex flex-col items-center justify-center p-4 bg-gray-900 min-h-screen text-white">
       <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center">A* Pathfinding Visualizer</h1>
 
-      {/* Responsive Grid */}
       <div
         className="overflow-auto p-2 bg-gray-800 rounded-lg shadow-lg border border-gray-600"
         style={{
@@ -116,13 +123,12 @@ const AStarVisualizer = () => {
                 sm:w-6 sm:h-6 w-4 h-4 ${bgColor}`}
               whileHover={{ scale: 1.2 }}
               onClick={() => setEnd({ x: cell.x, y: cell.y })}
-              onTouchStart={() => setEnd({ x: cell.x, y: cell.y })} // Touch support for mobile
+              onTouchStart={() => setEnd({ x: cell.x, y: cell.y })}
             />
           );
         })}
       </div>
 
-      {/* Buttons */}
       <div className="mt-4 flex flex-wrap justify-center space-x-2">
         <button
           onClick={handleFindPath}
