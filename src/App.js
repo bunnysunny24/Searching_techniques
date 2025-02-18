@@ -5,7 +5,7 @@ import Bfs from "./components/PacmanGame";
 import Taskbar from "./components/taskbar";
 
 function App() {
-  const [selectedComponent, setSelectedComponent] = useState("AStar"); // Default to A*
+  const [selectedComponent, setSelectedComponent] = useState("AStar"); 
 
   return (
     <div>

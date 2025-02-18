@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-
 const BOARD_WIDTH = 20;
 const BOARD_HEIGHT = 12;
-const MOVE_SPEED = 300; // Ghosts' movement speed
-const PACMAN_MOVE_SPEED = 300; // Pac-Man's movement speed to match ghosts
+const MOVE_SPEED = 300; 
+const PACMAN_MOVE_SPEED = 300; 
 const GHOST_COUNT = 2;
 const PELLET_COUNT = 5;
-
 const moves = [
   { x: 0, y: 1 },
   { x: 0, y: -1 },
   { x: 1, y: 0 },
   { x: -1, y: 0 },
 ];
-
 const bfsFindPath = (start, target) => {
   const queue = [{ ...start, path: [] }];
   const visited = new Set();
   visited.add(`${start.x}-${start.y}`);
-
   while (queue.length > 0) {
     const { x, y, path } = queue.shift();
     if (x === target.x && y === target.y) return path;
@@ -39,7 +35,6 @@ const bfsFindPath = (start, target) => {
   }
   return [];
 };
-
 const PacManGame = () => {
   const [pacman, setPacman] = useState({ x: 0, y: 0 });
   const [ghosts, setGhosts] = useState(
@@ -57,7 +52,6 @@ const PacManGame = () => {
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [won, setWon] = useState(false);
-
   const resetGame = () => {
     setPacman({ x: 0, y: 0 });
     setGhosts(
@@ -76,11 +70,10 @@ const PacManGame = () => {
     setGameOver(false);
     setWon(false);
   };
-
   useEffect(() => {
     const handleKeyPress = (e) => {
       if (gameOver || won) return;
-      e.preventDefault(); // Prevent page scrolling
+      e.preventDefault(); 
       const move = moves.find((m, i) => e.key === ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"][i]);
       if (move) {
         const newX = pacman.x + move.x;
@@ -92,15 +85,12 @@ const PacManGame = () => {
         }
       }
     };
-
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [pacman, pellets, gameOver, won]);
-
   useEffect(() => {
     if (pellets.length === 0) setWon(true);
   }, [pellets]);
-
   useEffect(() => {
     const moveGhosts = () => {
       if (gameOver || won) return;
@@ -111,7 +101,6 @@ const PacManGame = () => {
         })
       );
     };
-
     const interval = setInterval(moveGhosts, MOVE_SPEED);
     return () => clearInterval(interval);
   }, [pacman, gameOver, won]);
@@ -121,7 +110,6 @@ const PacManGame = () => {
       setGameOver(true);
     }
   }, [pacman, ghosts]);
-
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-gray-900 min-h-screen text-white">
       <h1 className="text-2xl font-bold mb-4 text-center">Pac-Man BFS AI</h1>
